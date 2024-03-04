@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+console.log('Hello from the Properties component!');
 const PropertiesPage = () => {
   return (
     <div>
