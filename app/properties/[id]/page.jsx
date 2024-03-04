@@ -13,7 +13,7 @@ const PropertyPage = () => {
   const name = searchParams.get('name');
   const pathname = usePathname();
 
-  console.log('Hello from the PropertyPage component!', id);
+  console.log('Hello from the PropertyPage component!', id, name);
   return (
     <div>
       PropertyPage
