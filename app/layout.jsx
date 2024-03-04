@@ -1,3 +1,5 @@
+import '@/assets/styles/globals.css';
+
 const MainLayout = ({ children }) => {
   return (
     <html lang='en'>
