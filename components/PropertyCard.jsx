@@ -1,13 +1,12 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const PropertyCard = ({ property }) => {
+  const imageSrc = require(`/public/images/${property.images[0]}`);
+
   return (
     <div className='rounded-xl shadow-md relative'>
-      <img
-        src='images/properties/a1.jpg'
-        alt=''
-        className='w-full h-auto rounded-t-xl'
-      />
+      <Image src={imageSrc} alt='' className='w-full h-auto rounded-t-xl' />
       <div className='p-4'>
         <div className='text-left md:text-center lg:text-left mb-6'>
           <div className='text-gray-600'>{property.type}</div>
