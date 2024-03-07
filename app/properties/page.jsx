@@ -1,15 +1,17 @@
-'use client';
-
 import Link from 'next/link';
 import properties from '@/data/properties.json';
 
 const PropertiesPage = () => {
-  console.log(properties);
   return (
-    <div>
-      <h1 className='text-3xl'>Properties</h1>
-      <Link href='/'>Go Home</Link>
-    </div>
+    <section className='px-4 py-6'>
+      <div className='container-xl lg:container m-auto px-4 py-6'>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+          {properties.map((item) => (
+            <div>{item.name}</div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
