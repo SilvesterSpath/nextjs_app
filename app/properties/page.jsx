@@ -10,7 +10,7 @@ const PropertiesPage = () => {
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
             {properties.map((item) => (
-              <PropertyCard property={item} />
+              <PropertyCard property={item} key={item._id} />
             ))}
           </div>
         )}
