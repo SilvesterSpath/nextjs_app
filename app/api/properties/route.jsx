@@ -1,6 +1,9 @@
+import connectDB from '@/config/database';
+
 export const GET = async (request) => {
   try {
-    return new Response('Hello world', {
+    await connectDB();
+    return new Response(JSON.stringify({ message: 'Hello World!' }), {
       status: 200,
       headers: {
         'Content-Type': 'text/plain',
