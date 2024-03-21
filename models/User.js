@@ -29,6 +29,6 @@ const UserSchema = new Schema(
   }
 );
 
-const User = models.user || model('User', UserSchema); // this line ensures that the model is a singleton
+const User = models.User || model('User', UserSchema); // this line ensures that the model is a singleton
 
 export default User;

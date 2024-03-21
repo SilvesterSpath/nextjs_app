@@ -86,6 +86,6 @@ const PropertySchema = new Schema(
   }
 );
 
-const Property = models.property || model('Property', PropertySchema); // this line ensures that the model is a singleton
+const Property = models.Property || model('Property', PropertySchema); // this line ensures that the model is a singleton
 
 export default Property;
