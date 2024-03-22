@@ -19,6 +19,12 @@ async function fetchProperties() {
 
 const PropertiesPage = async () => {
   const properties = await fetchProperties();
+  console.log(properties[0]._id);
+
+  // Sort properties by date
+  properties.sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
 
   return (
     <section className='px-4 py-6'>
@@ -27,8 +33,11 @@ const PropertiesPage = async () => {
           <div>No properties found</div>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            {properties.map((item) => (
-              <PropertyCard property={item} key={item._id} />
+            {properties.map((item, index) => (
+              <PropertyCard
+                key={item._id ? item._id.toString() : index}
+                property={item}
+              />
             ))}
           </div>
         )}
