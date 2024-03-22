@@ -1,25 +1,8 @@
 import PropertyCard from '@/components/PropertyCard';
-import properties from '@/data/properties.json';
-
-async function fetchProperties() {
-  try {
-    // this is on the server so I have to include full domain
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties`
-    );
-    if (!response.ok) {
-      throw new Error('Something went wrong');
-    }
-    return response.json();
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
-}
+import { fetchProperties } from '@/utils/utils';
 
 const PropertiesPage = async () => {
   const properties = await fetchProperties();
-  console.log(properties[0]._id);
 
   // Sort properties by date
   properties.sort((a, b) => {
