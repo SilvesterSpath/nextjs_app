@@ -6,7 +6,7 @@ import {
   usePathname,
 } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { fetchProperties } from '@/utils/utils';
+import { fetchProperties } from '@/utils/requests';
 
 const PropertyPage = async () => {
   const [properties, setProperties] = useState([]);
