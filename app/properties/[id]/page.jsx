@@ -1,31 +1,35 @@
 'use client';
-import {
-  useRouter,
-  useParams,
-  useSearchParams,
-  usePathname,
-} from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { fetchProperties } from '@/utils/requests';
+import { fetchProperty } from '@/utils/requests';
 
 const PropertyPage = async () => {
-  const [properties, setProperties] = useState([]);
+  const [propertyData, setPropertyData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const { id } = useParams();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const newProperties = await fetchProperties();
-      setProperties(newProperties);
+    const fetchPropertyData = async () => {
+      if (!id) return;
+      try {
+        const newProperty = await fetchProperty(id);
+        setPropertyData(newProperty);
+      } catch (error) {
+        console.error('Error fetching property: ', error);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchData();
-  }, []);
+    if (propertyData === null) {
+      fetchPropertyData();
+    }
+  }, [id, propertyData]);
 
-  const searchParams = useSearchParams();
-  const { id } = useParams();
-  const name = searchParams.get('name');
+  const property =
+    /* properties.find((property) => property._id === id) */ propertyData;
 
-  const property = properties.find((item) => item._id === id);
-
-  console.log('Hello from the PropertyPage component!', id, name);
+  console.log('Hello from the PropertyPage component!', id);
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-10 px-6'>
