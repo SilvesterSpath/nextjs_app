@@ -35,8 +35,8 @@ const PropertyDetails = ({ property }) => {
                   <div className='flex items-center justify-center mb-4 border-b border-gray-200 md:border-b-0 pb-4 md:pb-0'>
                     <div className='text-gray-500 mr-2 font-bold'>Nightly</div>
                     <div className='text-2xl font-bold'>
-                      <i className='fa fa-xmark text-red-700'>
-                        ${property.rates.nightly}
+                      <i className='fa fa-xmark text-blue-500'>
+                        ${property.rates.nightly.toLocaleString()}
                       </i>
                     </div>
                   </div>
@@ -52,14 +52,14 @@ const PropertyDetails = ({ property }) => {
                   <div className='flex items-center justify-center mb-4 border-b border-gray-200 md:border-b-0 pb-4 md:pb-0'>
                     <div className='text-gray-500 mr-2 font-bold'>Weekly</div>
                     <div className='text-2xl font-bold text-blue-500'>
-                      ${property.rates.weekly}
+                      ${property.rates.weekly.toLocaleString()}
                     </div>
                   </div>
                 ) : (
                   <div className='flex items-center justify-center mb-4 border-b border-gray-200 md:border-b-0 pb-4 md:pb-0'>
                     <div className='text-gray-500 mr-2 font-bold'>Weekly</div>
                     <div className='text-2xl font-bold'>
-                      <FaTimes className='text-blue-500' />
+                      <FaTimes className='text-red-700' />
                     </div>
                   </div>
                 )}
@@ -67,14 +67,14 @@ const PropertyDetails = ({ property }) => {
                   <div className='flex items-center justify-center mb-4 pb-4 md:pb-0'>
                     <div className='text-gray-500 mr-2 font-bold'>Monthly</div>
                     <div className='text-2xl font-bold text-blue-500'>
-                      ${property.rates.monthly}
+                      ${property.rates.monthly.toLocaleString()}
                     </div>
                   </div>
                 ) : (
                   <div className='flex items-center justify-center mb-4 border-b border-gray-200 md:border-b-0 pb-4 md:pb-0'>
                     <div className='text-gray-500 mr-2 font-bold'>Monthly</div>
                     <div className='text-2xl font-bold'>
-                      <FaTimes className='text-blue-500' />
+                      <FaTimes className='text-red-700' />
                     </div>
                   </div>
                 )}
@@ -97,67 +97,20 @@ const PropertyDetails = ({ property }) => {
                   <span className='hidden sm:inline'>sqft</span>
                 </p>
               </div>
-              <p className='text-gray-500 mb-4'>{property.description}</p>
+              <p className='text-gray-500 mb-4 text-center'>
+                {property.description}
+              </p>
             </div>
             <div className='bg-white p-6 rounded-lg shadow-md mt-6'>
               <h3 className='text-lg font-bold mb-6'>Amenities</h3>
 
-              <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none'>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i> Wifi
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Full kitchen
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Washer & Dryer
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Free Parking
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Hot Tub
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  24/7 Security
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Wheelchair Accessible
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Elevator Access
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Dishwasher
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Gym/Fitness Center
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Air Conditioning
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Balcony/Patio
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Smart TV
-                </li>
-                <li>
-                  <i className='fas fa-check text-green-600 mr-2 mt-3'></i>
-                  Coffee Maker
-                </li>
+              <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none space-y-2'>
+                {property.amenities.map((item, index) => (
+                  <li key={index}>
+                    <FaCheck className='inline-block mr-2 text-green-500' />
+                    {item}
+                  </li>
+                ))}
               </ul>
             </div>
             <div className='bg-white p-6 rounded-lg shadow-md mt-6'>
