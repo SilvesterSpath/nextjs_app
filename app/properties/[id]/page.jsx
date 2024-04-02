@@ -6,6 +6,7 @@ import PropertyHeaderImage from '@/components/PropertyHeaderImage';
 import Link from 'next/link';
 import PropertyDetails from '@/components/PropertyDetails';
 import { FaArrowLeft } from 'react-icons/fa';
+import Spinner from '@/components/Spinner';
 
 const PropertyPage = () => {
   const [property, setProperty] = useState(null);
@@ -38,6 +39,10 @@ const PropertyPage = () => {
         No Property Found
       </h1>
     );
+  }
+
+  if (loading) {
+    return <Spinner />;
   }
 
   return (
