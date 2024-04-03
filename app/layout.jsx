@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar';
 import '@/assets/styles/globals.css';
+import AuthProvider from '@/components/AuthProvider';
 
 export const metadata = {
   title: 'PropertyPulse | Find The Perfect Rental',
@@ -11,12 +12,14 @@ export const metadata = {
 
 const MainLayout = ({ children }) => {
   return (
-    <html lang='en'>
-      <body>
-        <Navbar />
-        <main>{children}</main>
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang='en'>
+        <body>
+          <Navbar />
+          <main>{children}</main>
+        </body>
+      </html>
+    </AuthProvider>
   );
 };
 
