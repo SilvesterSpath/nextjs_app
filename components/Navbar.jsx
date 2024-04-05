@@ -1,18 +1,36 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '@/assets/images/logo-white.png';
 import profileDefault from '@/assets/images/profile.png';
 import { FaGoogle, FaGuilded } from 'react-icons/fa';
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   const [isMobilOpen, setIsMobilOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [providers, setProviders] = useState(false);
 
   const pathname = usePathname();
+
+  useEffect(() => {
+    const setAuthProviders = async () => {
+      const res = await getProviders();
+      setProviders(res);
+    };
+    setAuthProviders();
+  }, []);
+
+  /*   providers &&
+    Object.entries(providers.google).forEach(([key, value]) => {
+      console.log(`Key: ${key}, Value: ${value}`);
+    });
+
+  providers && console.log(providers.google['callbackUrl']); */
 
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
@@ -75,7 +93,7 @@ const Navbar = () => {
                 >
                   Properties
                 </Link>
-                {isLoggedIn && (
+                {session && (
                   <Link
                     href='/properties/add'
                     className={`${
@@ -90,16 +108,25 @@ const Navbar = () => {
           </div>
 
           {/* <!-- Right Side Menu (Logged Out) --> */}
-          {!isLoggedIn && (
+
+          {!session && providers && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
-                <Link
-                  href={'/login'}
-                  className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
-                >
-                  <FaGoogle className='text-white mr-2' />
-                  <span>Login or Register</span>
-                </Link>
+                {providers &&
+                  Object.values(providers).map((item) => (
+                    <button
+                      key={item['id']}
+                      onClick={() =>
+                        signIn(item['id'], {
+                          callbackUrl: item['callbackUrl'], //to go after authentication
+                        })
+                      }
+                      className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
+                    >
+                      <FaGoogle className='text-white mr-2' />
+                      <span>Login or Register</span>
+                    </button>
+                  ))}
               </div>
             </div>
           )}
@@ -107,7 +134,7 @@ const Navbar = () => {
           {/* <!-- Right Side Menu (Logged In) --> */}
 
           <div className='absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0'>
-            {isLoggedIn && (
+            {session && (
               <Link href='messages' className='relative group'>
                 <button
                   type='button'
@@ -138,7 +165,7 @@ const Navbar = () => {
             )}
 
             {/* <!-- Profile dropdown button --> */}
-            {isLoggedIn && (
+            {session && (
               <div className='relative ml-3'>
                 <div>
                   <button
@@ -223,7 +250,7 @@ const Navbar = () => {
             >
               Properties
             </Link>
-            {isLoggedIn && (
+            {session && (
               <Link
                 href='/properties/add'
                 className={`${
@@ -233,15 +260,23 @@ const Navbar = () => {
                 Add Property
               </Link>
             )}
-            {!isLoggedIn && (
-              <Link
-                href={'/login'}
-                className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-4'
-              >
-                <FaGoogle className='text-white mr-2' />
-                <span>Login or Register</span>
-              </Link>
-            )}
+            {!session &&
+              providers &&
+              Object.values(providers).map((item) => (
+                <Link
+                  key={item.id} // Add a unique key prop
+                  onClick={() =>
+                    signIn(item['id'], {
+                      callbackUrl: item['callbackUrl'], // to go after authentication
+                    })
+                  }
+                  href={'/login'}
+                  className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-4'
+                >
+                  <FaGoogle className='text-white mr-2' />
+                  <span>Login or Register</span>
+                </Link>
+              ))}
           </div>
         </div>
       )}
