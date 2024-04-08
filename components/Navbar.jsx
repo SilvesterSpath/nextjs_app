@@ -120,11 +120,7 @@ const Navbar = () => {
                   Object.values(providers).map((item) => (
                     <button
                       key={item['id']}
-                      onClick={() =>
-                        signIn(item['id'], {
-                          callbackUrl: item['callbackUrl'], //to go after authentication
-                        })
-                      }
+                      onClick={() => signIn(item['id'])}
                       className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
                     >
                       <FaGoogle className='text-white mr-2' />
@@ -225,6 +221,7 @@ const Navbar = () => {
                       role='menuitem'
                       tabIndex='-1'
                       id='user-menu-item-2'
+                      onClick={() => signOut({ callbackUrl: '/' })}
                     >
                       Sign Out
                     </button>
