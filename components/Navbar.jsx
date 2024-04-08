@@ -15,6 +15,8 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [providers, setProviders] = useState(false);
 
+  const profileImage = session?.user?.image;
+
   const pathname = usePathname();
 
   useEffect(() => {
@@ -24,6 +26,8 @@ const Navbar = () => {
     };
     setAuthProviders();
   }, []);
+
+  console.log(profileImage);
 
   /*   providers &&
     Object.entries(providers.google).forEach(([key, value]) => {
@@ -180,8 +184,10 @@ const Navbar = () => {
                     <span className='sr-only'>Open user menu</span>
                     <Image
                       className='h-8 w-8 rounded-full'
-                      src={profileDefault}
+                      src={profileImage || profileDefault}
                       alt=''
+                      width={40}
+                      height={40}
                     />
                   </button>
                 </div>
