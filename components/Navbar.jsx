@@ -27,8 +27,6 @@ const Navbar = () => {
     setAuthProviders();
   }, []);
 
-  console.log(profileImage);
-
   /*   providers &&
     Object.entries(providers.google).forEach(([key, value]) => {
       console.log(`Key: ${key}, Value: ${value}`);
@@ -221,7 +219,10 @@ const Navbar = () => {
                       role='menuitem'
                       tabIndex='-1'
                       id='user-menu-item-2'
-                      onClick={() => signOut({ callbackUrl: '/' })}
+                      onClick={() => {
+                        setIsProfileOpen(false);
+                        signOut({ callbackUrl: '/' });
+                      }}
                     >
                       Sign Out
                     </button>
