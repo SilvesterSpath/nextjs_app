@@ -50,4 +50,5 @@ export const authOptions = {
   },
   debug: true,
   secureCookie: true,
+  secret: process.env.NEXTAUTH_SECRET,
 };
