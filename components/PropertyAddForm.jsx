@@ -62,7 +62,19 @@ const PropertyAddForm = () => {
     });
   };
 
-  const handleImageChange = () => {};
+  const handleImageChange = (e) => {
+    const { files } = e.target;
+
+    // Clone images array
+    const updatedImages = [...fields.images];
+
+    // Add new files to the arra
+    for (const item of files) {
+      updatedImages.push(item);
+    }
+
+    setFields((fields) => ({ ...fields, images: updatedImages }));
+  };
 
   return (
     <div>
