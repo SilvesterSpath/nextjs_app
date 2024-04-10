@@ -32,7 +32,8 @@ const PropertyAddForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
+
+    // check if nested property
     if (name.includes('.')) {
       const [outerKey, innerKey] = name.split('.');
       setFields((fields) => ({
@@ -48,7 +49,19 @@ const PropertyAddForm = () => {
     }
   };
 
-  const handleAmenitiesChange = () => {};
+  const handleAmenitiesChange = (e) => {
+    const { value, checked } = e.target;
+
+    setFields((fields) => {
+      // check if value is already in array
+      const amenities = checked
+        ? [...fields.amenities, value]
+        : fields.amenities.filter((item) => item !== value);
+
+      return { ...fields, amenities };
+    });
+  };
+
   const handleImageChange = () => {};
 
   return (
@@ -214,22 +227,6 @@ const PropertyAddForm = () => {
             Amenities
           </label>
           <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
-            {/*             {fields.amenities &&
-              fields.amenities.map((item) => (
-                <div>
-                  <input
-                    type='checkbox'
-                    id={`amenity_${item}`}
-                    name='amenities'
-                    value={`${item}`}
-                    className='mr-2'
-                    checked={fields.amenities.includes(`${item}`)}
-                  />
-                  <label htmlFor={`amenity_${item}`}>{`${
-                    item[0].toUpperCase() + item.slice(1)
-                  }`}</label>
-                </div>
-              ))} */}
             <div>
               <input
                 type='checkbox'
