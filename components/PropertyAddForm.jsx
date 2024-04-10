@@ -30,7 +30,24 @@ const PropertyAddForm = () => {
     images: [],
   });
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    if (name.includes('.')) {
+      const [outerKey, innerKey] = name.split('.');
+      setFields((fields) => ({
+        // the parentheses are because implicit return
+        ...fields,
+        [outerKey]: {
+          ...fields[outerKey], // this should be spread because [outerKey] will overwrite the entire object
+          [innerKey]: value,
+        },
+      }));
+    } else {
+      setFields((fields) => ({ ...fields, [name]: value }));
+    }
+  };
+
   const handleAmenitiesChange = () => {};
   const handleImageChange = () => {};
 
