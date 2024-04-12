@@ -74,15 +74,21 @@ export const POST = async (request) => {
         phone: formData.get('seller_info.phone'),
       },
       owner: userId,
-      images,
+      /*images,*/
     };
 
-    return new Response(JSON.stringify({ message: 'Success' }), {
+    const newProperty = new Property(propertyData);
+    await newProperty.save();
+
+    return Response.redirect(
+      `${process.env.NEXT_AUTH_URL}/properties/${newProperty._id}`
+    );
+    /*     return new Response(JSON.stringify({ message: 'Success' }), {
       status: 200,
       headers: {
         'Content-Type': 'text/plain',
       },
-    });
+    }); */
   } catch (error) {
     return new Response(JSON.stringify(error), {
       status: 500,
