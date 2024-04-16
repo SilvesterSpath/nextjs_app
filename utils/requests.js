@@ -9,7 +9,10 @@ export async function fetchProperties() {
     }
 
     // this is on the server so I have to include full domain
-    const response = await fetch(`${apiDomain}/properties`);
+    const response = await fetch(`${apiDomain}/properties`, {
+      cache: 'no-store',
+    });
+
     if (!response.ok) {
       throw new Error('Something went wrong');
     }
