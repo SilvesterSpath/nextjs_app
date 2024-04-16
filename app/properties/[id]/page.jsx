@@ -5,6 +5,7 @@ import { fetchProperty } from '@/utils/requests';
 import PropertyHeaderImage from '@/components/PropertyHeaderImage';
 import Link from 'next/link';
 import PropertyDetails from '@/components/PropertyDetails';
+import PropertyImages from '@/components/PropertyImages';
 import { FaArrowLeft } from 'react-icons/fa';
 import Spinner from '@/components/Spinner';
 
@@ -73,7 +74,6 @@ const PropertyPage = () => {
                   <button className='bg-orange-500 hover:bg-orange-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center'>
                     <i className='fas fa-share mr-2'></i> Share Property
                   </button>
-
                   {/* <!-- Contact Form --> */}
                   <div className='bg-white p-6 rounded-lg shadow-md'>
                     <h3 className='text-xl font-bold mb-6'>
@@ -152,6 +152,7 @@ const PropertyPage = () => {
               </div>
             </div>
           </section>
+          <PropertyImages images={property.images} />
         </>
       )}
     </>
