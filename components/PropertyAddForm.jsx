@@ -427,6 +427,42 @@ const PropertyAddForm = () => {
               />
               <label htmlFor='amenity_coffee_maker'>Coffee Maker</label>
             </div>
+            <div>
+              <input
+                type='checkbox'
+                id='amenity_internet'
+                name='amenities'
+                value='High Speed Internet'
+                className='mr-2'
+                checked={fields.amenities.includes('High Speed Internet')}
+                onChange={handleAmenitiesChange}
+              />
+              <label htmlFor='amenity_internet'>High Speed Internet</label>
+            </div>
+            <div>
+              <input
+                type='checkbox'
+                id='amenity_grill'
+                name='amenities'
+                value='Outdoor Grill/BBQ'
+                className='mr-2'
+                checked={fields.amenities.includes('Outdoor Grill/BBQ')}
+                onChange={handleAmenitiesChange}
+              />
+              <label htmlFor='amenity_grill'>Outdoor Grill/BBQ</label>
+            </div>
+            <div>
+              <input
+                type='checkbox'
+                id='amenity_fireplace'
+                name='amenities'
+                value='Fireplace'
+                className='mr-2'
+                checked={fields.amenities.includes('Fireplace')}
+                onChange={handleAmenitiesChange}
+              />
+              <label htmlFor='amenity_fireplace'>Fireplace</label>
+            </div>
           </div>
         </div>
 
