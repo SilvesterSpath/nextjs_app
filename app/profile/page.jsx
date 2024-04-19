@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import profileDefault from '../../assets/images/profile.png';
 import Spinner from '@/components/Spinner';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchUserProperties } from '@/utils/requests';
 
 const ProfilePage = async () => {
@@ -16,9 +16,34 @@ const ProfilePage = async () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const userProperties = await fetchUserProperties(session?.user?.id);
+  /*  const userProperties = await fetchUserProperties(session?.user?.id);
 
-  console.log(userProperties);
+  console.log(userProperties); */
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        if (session?.user?.id) {
+          const userProperties = await fetchUserProperties(session.user.id);
+
+          setProperties(userProperties);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching user properties:', error);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, [session]);
+
+  if (loading) {
+    return <Spinner />;
+  }
+
+  const handleDeleteProperty = async (id) => {};
 
   return (
     <>
@@ -48,60 +73,50 @@ const ProfilePage = async () => {
 
               <div className='md:w-3/4 md:pl-4'>
                 <h2 className='text-xl font-semibold mb-4'>Your Listings</h2>
-                <div className='mb-10'>
-                  <a href='/property.html'>
-                    <img
-                      className='h-32 w-full rounded-md object-cover'
-                      src='/images/properties/a1.jpg'
-                      alt='Property 1'
-                    />
-                  </a>
-                  <div className='mt-2'>
-                    <p className='text-lg font-semibold'>Property Title 1</p>
-                    <p className='text-gray-600'>Address: 123 Main St</p>
+                {properties.length === 0 ? (
+                  <p>You have no property listings</p>
+                ) : (
+                  <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+                    {properties.map((item, index) => (
+                      <div
+                        className='mb-10'
+                        key={item._id ? item._id.toString() : index}
+                      >
+                        <Link href={`/properties/${item._id}`}>
+                          <Image
+                            className='h-32 w-full rounded-md object-cover'
+                            src={item.images[0]}
+                            alt='Property 1'
+                            width={500}
+                            height={100}
+                          />
+                        </Link>
+                        <div className='mt-2'>
+                          <p className='text-lg font-semibold'>{item.name}</p>
+                          <p className='text-gray-600'>
+                            Address: {item.location.street}
+                            {item.location.city} {item.location.state}
+                          </p>
+                        </div>
+                        <div className='mt-2'>
+                          <Link
+                            href={`/properties/${item._id}/edit`}
+                            className='bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600'
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleDeleteProperty(item._id)}
+                            className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
+                            type='button'
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <div className='mt-2'>
-                    <a
-                      href='/add-property.html'
-                      className='bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600'
-                    >
-                      Edit
-                    </a>
-                    <button
-                      className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
-                      type='button'
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-                <div className='mb-10'>
-                  <a href='/property.html'>
-                    <img
-                      className='h-32 w-full rounded-md object-cover'
-                      src='/images/properties/b1.jpg'
-                      alt='Property 2'
-                    />
-                  </a>
-                  <div className='mt-2'>
-                    <p className='text-lg font-semibold'>Property Title 2</p>
-                    <p className='text-gray-600'>Address: 456 Elm St</p>
-                  </div>
-                  <div className='mt-2'>
-                    <a
-                      href='/add-property.html'
-                      className='bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600'
-                    >
-                      Edit
-                    </a>
-                    <button
-                      className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
-                      type='button'
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
