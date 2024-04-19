@@ -76,46 +76,44 @@ const ProfilePage = async () => {
                 {properties.length === 0 ? (
                   <p>You have no property listings</p>
                 ) : (
-                  <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-                    {properties.map((item, index) => (
-                      <div
-                        className='mb-10'
-                        key={item._id ? item._id.toString() : index}
-                      >
-                        <Link href={`/properties/${item._id}`}>
-                          <Image
-                            className='h-32 w-full rounded-md object-cover'
-                            src={item.images[0]}
-                            alt='Property 1'
-                            width={500}
-                            height={100}
-                          />
-                        </Link>
-                        <div className='mt-2'>
-                          <p className='text-lg font-semibold'>{item.name}</p>
-                          <p className='text-gray-600'>
-                            Address: {item.location.street}
-                            {item.location.city} {item.location.state}
-                          </p>
-                        </div>
-                        <div className='mt-2'>
-                          <Link
-                            href={`/properties/${item._id}/edit`}
-                            className='bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600'
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => handleDeleteProperty(item._id)}
-                            className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
-                            type='button'
-                          >
-                            Delete
-                          </button>
-                        </div>
+                  properties.map((item, index) => (
+                    <div
+                      className='mb-10'
+                      key={item._id ? item._id.toString() : index}
+                    >
+                      <Link href={`/properties/${item._id}`}>
+                        <Image
+                          className='h-32 w-full rounded-md object-cover'
+                          src={item.images[0]}
+                          alt='Property 1'
+                          width={500}
+                          height={100}
+                        />
+                      </Link>
+                      <div className='mt-2'>
+                        <p className='text-lg font-semibold'>{item.name}</p>
+                        <p className='text-gray-600'>
+                          Address: {item.location.street}
+                          {item.location.city} {item.location.state}
+                        </p>
                       </div>
-                    ))}
-                  </div>
+                      <div className='mt-2'>
+                        <Link
+                          href={`/properties/${item._id}/edit`}
+                          className='bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600'
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteProperty(item._id)}
+                          className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
+                          type='button'
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
                 )}
               </div>
             </div>
