@@ -44,3 +44,26 @@ export async function fetchProperty(id) {
     return null;
   }
 }
+
+// Fetch all user property
+export async function fetchUserProperties(userId) {
+  try {
+    // if domain is not awailable yet
+    if (!apiDomain) {
+      return [];
+    }
+
+    // this is on the server so I have to include full domain
+    const response = await fetch(`${apiDomain}/properties/user/${userId}`, {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error('Something went wrong');
+    }
+    return response.json();
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}

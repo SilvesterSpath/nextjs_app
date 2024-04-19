@@ -3,12 +3,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import profileDefault from '../../assets/images/profile.png';
+import Spinner from '@/components/Spinner';
+import { useState } from 'react';
+import { fetchUserProperties } from '@/utils/requests';
 
-const ProfilePage = () => {
+const ProfilePage = async () => {
   const { data: session } = useSession();
   const profileImage = session?.user?.image;
   const profileName = session?.user?.name;
   const profileEmail = session?.user?.email;
+
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const userProperties = await fetchUserProperties(session?.user?.id);
+
+  console.log(userProperties);
 
   return (
     <>
