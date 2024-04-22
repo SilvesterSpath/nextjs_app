@@ -7,7 +7,7 @@ import Spinner from '@/components/Spinner';
 import { useState, useEffect } from 'react';
 import { fetchUserProperties } from '@/utils/requests';
 
-const ProfilePage = async () => {
+const ProfilePage = () => {
   const { data: session } = useSession();
   const profileImage = session?.user?.image;
   const profileName = session?.user?.name;
@@ -43,7 +43,32 @@ const ProfilePage = async () => {
     return <Spinner />;
   }
 
-  const handleDeleteProperty = async (id) => {};
+  const handleDeleteProperty = async (id) => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this property?'
+    );
+    if (confirmed) {
+      try {
+        const response = await fetch(`/api/properties/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 200) {
+          // Remove the property from the list
+          const updatedProperties = properties.filter(
+            (item) => item._id !== id
+          );
+          setProperties(updatedProperties);
+          alert('Property deleted');
+        }
+      } catch (error) {
+        console.error('Error deleting property:', error);
+      }
+    }
+  };
 
   return (
     <>
