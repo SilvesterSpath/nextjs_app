@@ -1,8 +1,13 @@
 'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { fetchProperty } from '@/utils/requests';
+import Spinner from './Spinner';
 
 const PropertyEditForm = () => {
+  const { id } = useParams();
+  const router = useRouter();
   const [fields, setFields] = useState({
     type: 'Apartment',
     name: 'Test Property',
@@ -28,6 +33,36 @@ const PropertyEditForm = () => {
       phone: '',
     },
   });
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch property data
+    const fetchPropertyData = async () => {
+      try {
+        const propertyData = await fetchProperty(id);
+
+        // Check for null and turn them into empty fields
+        if (propertyData && propertyData.rates) {
+          const defaultRates = { ...propertyData.rates };
+          console.log(defaultRates);
+          for (const key in defaultRates) {
+            if (defaultRates[key] === null) {
+              defaultRates[key] = '';
+            }
+          }
+          propertyData.rates = defaultRates;
+        }
+
+        setFields(propertyData);
+      } catch (error) {
+        console.error('Error fetching property: ', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPropertyData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,6 +100,10 @@ const PropertyEditForm = () => {
     e.preventDefault();
     console.log(fields);
   };
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <div>
