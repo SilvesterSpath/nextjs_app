@@ -27,7 +27,6 @@ const PropertyEditForm = () => {
       email: 'test@test.com',
       phone: '',
     },
-    images: [],
   });
 
   const handleChange = (e) => {
@@ -62,28 +61,15 @@ const PropertyEditForm = () => {
     });
   };
 
-  const handleImageChange = (e) => {
-    const { files } = e.target;
-
-    // Clone images array
-    const updatedImages = [...fields.images];
-
-    // Add new files to the arra
-    for (const item of files) {
-      updatedImages.push(item);
-    }
-
-    setFields((fields) => ({ ...fields, images: updatedImages }));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(fields);
   };
 
   return (
     <div>
       {' '}
-      <form
-        action='/api/properties'
-        method='POST'
-        encType='multipart/form-data'
-      >
+      <form onSubmit={handleSubmit}>
         <h2 className='text-3xl text-center font-semibold mb-6'>
           Edit Property
         </h2>
@@ -563,25 +549,6 @@ const PropertyEditForm = () => {
             placeholder='Phone'
             value={fields.seller_info.phone}
             onChange={handleChange}
-          />
-        </div>
-
-        <div className='mb-4'>
-          <label
-            htmlFor='images'
-            className='block text-gray-700 font-bold mb-2'
-          >
-            Images (Select up to 4 images)
-          </label>
-          <input
-            type='file'
-            id='images'
-            name='images'
-            className='border rounded w-full py-2 px-3'
-            accept='image/*'
-            multiple
-            onChange={handleImageChange}
-            required
           />
         </div>
 
