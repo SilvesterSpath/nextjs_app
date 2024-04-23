@@ -6,6 +6,7 @@ import profileDefault from '../../assets/images/profile.png';
 import Spinner from '@/components/Spinner';
 import { useState, useEffect } from 'react';
 import { fetchUserProperties } from '@/utils/requests';
+import { toast } from 'react-toastify';
 
 const ProfilePage = () => {
   const { data: session } = useSession();
@@ -62,10 +63,12 @@ const ProfilePage = () => {
             (item) => item._id !== id
           );
           setProperties(updatedProperties);
-          alert('Property deleted');
+          toast.success('Property deleted');
+        } else {
+          toast.error('Failed to delete property');
         }
       } catch (error) {
-        console.error('Failed to delete property:', error);
+        toast.error('Failed to delete property:', error);
       }
     }
   };
