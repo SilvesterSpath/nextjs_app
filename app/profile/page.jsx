@@ -65,7 +65,7 @@ const ProfilePage = () => {
           alert('Property deleted');
         }
       } catch (error) {
-        console.error('Error deleting property:', error);
+        console.error('Failed to delete property:', error);
       }
     }
   };
