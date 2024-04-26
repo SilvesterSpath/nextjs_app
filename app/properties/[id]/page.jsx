@@ -9,6 +9,7 @@ import PropertyImages from '@/components/PropertyImages';
 import { FaArrowLeft } from 'react-icons/fa';
 import Spinner from '@/components/Spinner';
 import BookmarkButton from '@/components/BookmarkButton';
+import ShareButton from '@/components/ShareButton';
 
 const PropertyPage = () => {
   const [property, setProperty] = useState(null);
@@ -70,9 +71,7 @@ const PropertyPage = () => {
                 {/* <!-- Sidebar --> */}
                 <aside className='space-y-4'>
                   <BookmarkButton property={property} />
-                  <button className='bg-orange-500 hover:bg-orange-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center'>
-                    <i className='fas fa-share mr-2'></i> Share Property
-                  </button>
+                  <ShareButton property={property} />
                   {/* <!-- Contact Form --> */}
                   <div className='bg-white p-6 rounded-lg shadow-md'>
                     <h3 className='text-xl font-bold mb-6'>
