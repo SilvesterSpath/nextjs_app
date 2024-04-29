@@ -9,6 +9,34 @@ const BookmarkButton = ({ property }) => {
   const userId = session?.user?.id;
 
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkBookmarkStatus = async () => {
+      try {
+        const res = await fetch('/api/bookmarks/check', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            propertyId: property._id,
+          }),
+        });
+
+        if (res.status === 200) {
+          const data = await res.json();
+          setIsBookmarked(data.isBookmarked);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkBookmarkStatus();
+  }, [property._id, userId]);
 
   const handleClick = async () => {
     if (!userId) {
@@ -37,6 +65,10 @@ const BookmarkButton = ({ property }) => {
       toast.error('Something went wrong');
     }
   };
+
+  if (loading) {
+    return <p className='text-center'>...Loading</p>;
+  }
 
   return isBookmarked ? (
     <button
