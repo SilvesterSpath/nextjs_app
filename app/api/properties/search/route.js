@@ -14,7 +14,9 @@ export const GET = async (request) => {
 
     // to get all fractions that a user types in the search bar
     const locationPattern = new RegExp(location, 'i');
+    console.log(locationPattern);
 
+    // match location pattern against database fields
     let query = {
       $or: [
         { name: locationPattern },
@@ -26,7 +28,15 @@ export const GET = async (request) => {
       ],
     };
 
-    return new Response(JSON.stringify({ message: 'Success' }), {
+    // ONly check for property if its not 'All'
+    if (propertyType && propertyType !== 'All') {
+      const propertyTypePattern = new RegExp(propertyType, 'i');
+      query.type = propertyTypePattern;
+    }
+
+    const properties = await Property.find(query);
+
+    return new Response(JSON.stringify(properties), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
