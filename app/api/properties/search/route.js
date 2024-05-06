@@ -3,7 +3,7 @@ import Property from '@/models/Property';
 
 // GET /api/properties/search
 // when I hit this route in the browser:
-//'http://localhost:3000/api/properties/search?location=new%20york&propertyType=condo'
+//'http://localhost:3000/api/properties/search?location=boston&propertyType=All'
 export const GET = async (request) => {
   try {
     await connectDB();
@@ -14,7 +14,6 @@ export const GET = async (request) => {
 
     // to get all fractions that a user types in the search bar
     const locationPattern = new RegExp(location, 'i');
-    console.log(locationPattern);
 
     // match location pattern against database fields
     let query = {
@@ -28,7 +27,7 @@ export const GET = async (request) => {
       ],
     };
 
-    // ONly check for property if its not 'All'
+    // Only check for property if its not 'All'
     if (propertyType && propertyType !== 'All') {
       const propertyTypePattern = new RegExp(propertyType, 'i');
       query.type = propertyTypePattern;
