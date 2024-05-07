@@ -1,47 +1,38 @@
 'use client';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import PropertyCard from '@/components/PropertyCard';
+import Spinner from '@/components/Spinner';
+import { fetchSearchResults } from '@/utils/requests';
 
 const SearchResultsPage = () => {
   const searchParams = useSearchParams();
-
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const location = searchParams.get('location');
   const propertyType = searchParams.get('propertyType');
 
-  console.log(location, propertyType);
-
   useEffect(() => {
-    const fetchSearchResults = async () => {
-      try {
-        const res = await fetch(
-          `/api/properties/search?location=${location}&propertyType=${propertyType}`
-        );
-
-        if (res.status === 200) {
-          const data = await res.json();
-          data.length > 0 && console.log('data', data);
-          setProperties(data);
-        } else {
-          setProperties([]);
-        }
-
-        setProperties(res.data);
-      } catch (error) {
-        console.log('error', error);
-      } finally {
-        setLoading(false);
-      }
+    const fetchData = async () => {
+      const data = await fetchSearchResults(location, propertyType);
+      setProperties(data);
+      setLoading(false);
     };
-    fetchSearchResults();
+    fetchData();
   }, [location, propertyType]);
 
-  properties && properties.length > 0 && console.log('properties', properties);
+  properties && console.log('properties', properties);
 
-  return <div>SearchResultsPage</div>;
+  return (
+    <>
+      {loading ? (
+        <Spinner />
+      ) : (
+        properties.map((item) => <PropertyCard key={item.id} property={item} />)
+      )}
+    </>
+  );
 };
 
 export default SearchResultsPage;

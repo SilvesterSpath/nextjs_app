@@ -67,3 +67,22 @@ export async function fetchUserProperties(userId) {
     return [];
   }
 }
+
+// Fetch search results
+export async function fetchSearchResults(location, propertyType) {
+  try {
+    const res = await fetch(
+      `/api/properties/search?location=${location}&propertyType=${propertyType}`
+    );
+
+    if (res.status === 200) {
+      const data = await res.json();
+      return data;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.log('error', error);
+    return [];
+  }
+}
