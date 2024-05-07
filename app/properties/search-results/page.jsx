@@ -26,11 +26,22 @@ const SearchResultsPage = () => {
 
   return (
     <>
-      {loading ? (
-        <Spinner />
-      ) : (
-        properties.map((item) => <PropertyCard key={item.id} property={item} />)
-      )}
+      <section className='px-4 py-6'>
+        <div className='container-xl lg:container m-auto'>
+          <h2 className='text-3xl font-bold text-blue-500 mb-6 text-center'>
+            Search Results
+          </h2>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+            {loading ? (
+              <Spinner />
+            ) : (
+              properties.map((item) => (
+                <PropertyCard key={item.id} property={item} />
+              ))
+            )}
+          </div>
+        </div>
+      </section>
     </>
   );
 };
