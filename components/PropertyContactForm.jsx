@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const PropertyContactForm = ({ property }) => {
   const [name, setName] = useState('');
@@ -19,7 +20,36 @@ const PropertyContactForm = ({ property }) => {
       recipient: property.owner,
       property: property._id,
     };
-    setWasSubmitted(true);
+    try {
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      console.log(res);
+
+      if (res.status === 200) {
+        toast.success('Message sent successfully');
+      } else if (res.status === 400 || res.status === 401) {
+        // data.message instead of res.data.message because of next.js
+        toast.error(data.message);
+      } else {
+        toast.error('Error sending message');
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Error sending message');
+    } finally {
+      setName('');
+      setEmail('');
+      setMessage('');
+      setPhone('');
+
+      setWasSubmitted(true);
+    }
   };
 
   return (
