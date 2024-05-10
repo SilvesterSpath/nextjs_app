@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
-const PropertyContactForm = async ({ property }) => {
+const PropertyContactForm = ({ property }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -54,21 +54,12 @@ const PropertyContactForm = async ({ property }) => {
     }
   };
 
-  if (!session || !session.user) {
-    return (
-      <div className='bg-white p-6 rounded-lg shadow-md'>
-        <h3 className='text-xl font-bold mb-6'>Contact Property Manager</h3>
-        <p className='text-red-500 mb-4'>
-          You must be logged in to send the message
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
       <h3 className='text-xl font-bold mb-6'>Contact Property Manager</h3>
-      {wasSubmitted ? (
+      {!session ? (
+        <p>You must be logged in to send the message</p>
+      ) : wasSubmitted ? (
         <p className='text-green-500 mb-4'>
           Your message has been sent successfully
         </p>
