@@ -106,7 +106,7 @@ const PropertyDetails = ({ property }) => {
 
               <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none space-y-2'>
                 {property.amenities.map((item, index) => (
-                  <li key={item._id}>
+                  <li key={index}>
                     <FaCheck className='inline-block mr-2 text-green-500' />
                     {item}
                   </li>

@@ -15,8 +15,11 @@ export const POST = async (req, res) => {
     const sessionUser = await getSessionUser();
 
     if (!sessionUser || !sessionUser.user) {
+      console.log('You must be logged in to send the message');
       return new Response(
-        { message: 'You must be logged in to send the message' },
+        JSON.stringify({
+          message: 'You must be logged in to send the message',
+        }),
         { status: 401 }
       );
     }
@@ -35,10 +38,10 @@ export const POST = async (req, res) => {
     }
 
     const newMessage = new Message({
-      name,
       sender: user.id,
       recipient,
       property,
+      name,
       email,
       phone,
       body: message,
@@ -54,8 +57,11 @@ export const POST = async (req, res) => {
     );
   } catch (error) {
     console.log(error);
-    return new Response(JSON.stringify({ message: 'Error sending message' }), {
-      status: 500,
-    });
+    return new Response(
+      JSON.stringify({ message: 'Error sending message, backend' }),
+      {
+        status: 500,
+      }
+    );
   }
 };

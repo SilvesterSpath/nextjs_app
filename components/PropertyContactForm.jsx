@@ -29,19 +29,18 @@ const PropertyContactForm = ({ property }) => {
         body: JSON.stringify(data),
       });
 
-      console.log(res);
-
       if (res.status === 200) {
         toast.success('Message sent successfully');
       } else if (res.status === 400 || res.status === 401) {
         // data.message instead of res.data.message because of next.js
-        toast.error(data.message);
+        const dataObject = await res.json();
+        toast.error(dataObject.message);
       } else {
-        toast.error('Error sending message');
+        toast.error('Error sending message, first');
       }
     } catch (error) {
       console.log(error);
-      toast.error('Error sending message');
+      toast.error('Error sending message, second');
     } finally {
       setName('');
       setEmail('');
