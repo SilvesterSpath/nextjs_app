@@ -1,14 +1,17 @@
 'use client';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
-const PropertyContactForm = ({ property }) => {
+const PropertyContactForm = async ({ property }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [phone, setPhone] = useState('');
   const [wasSubmitted, setWasSubmitted] = useState(false);
+
+  const { data: session } = useSession();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,6 +53,17 @@ const PropertyContactForm = ({ property }) => {
       setWasSubmitted(true);
     }
   };
+
+  if (!session || !session.user) {
+    return (
+      <div className='bg-white p-6 rounded-lg shadow-md'>
+        <h3 className='text-xl font-bold mb-6'>Contact Property Manager</h3>
+        <p className='text-red-500 mb-4'>
+          You must be logged in to send the message
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
