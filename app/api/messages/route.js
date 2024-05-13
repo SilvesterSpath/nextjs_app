@@ -4,6 +4,39 @@ import { getSessionUser } from '@/utils/getSessionUser';
 
 export const dynamic = 'force-dynamic';
 
+// GET /api/messages
+export const GET = async (req, res) => {
+  try {
+    await connectDB();
+
+    const sessionUser = await getSessionUser(req, res);
+    const { user } = sessionUser;
+
+    if (!sessionUser || !sessionUser.user) {
+      return new Response(
+        JSON.stringify({
+          message: 'You must be logged in to see your messages',
+        }),
+        { status: 401 }
+      );
+    }
+
+    const messages = await Message.find({ recipient: user.id }).sort({
+      createdAt: -1,
+    });
+
+    return new Response(JSON.stringify(messages), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return new Response('Something went wrong', { status: 500 });
+  }
+};
+
 // POST /api/messages
 export const POST = async (req, res) => {
   try {
