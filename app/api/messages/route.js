@@ -11,6 +11,7 @@ export const GET = async (req, res) => {
 
     const sessionUser = await getSessionUser(req, res);
     const { user } = sessionUser;
+    console.log(user);
 
     if (!sessionUser || !sessionUser.user) {
       return new Response(
@@ -21,9 +22,10 @@ export const GET = async (req, res) => {
       );
     }
 
-    const messages = await Message.find({ recipient: user.id }).sort({
+    const messages = await Message.find({ sender: user.id }).sort({
       createdAt: -1,
     });
+    console.log(messages);
 
     return new Response(JSON.stringify(messages), {
       status: 200,

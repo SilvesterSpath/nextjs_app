@@ -9,7 +9,7 @@ const SavedPropertiesPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetchBookmarkedProperties = async () => {
       try {
         const res = await fetch('/api/bookmarks');
         if (res.status === 200) {
@@ -26,7 +26,7 @@ const SavedPropertiesPage = () => {
         setIsLoading(false);
       }
     };
-    fetchProperties();
+    fetchBookmarkedProperties();
   }, []);
 
   if (isLoading) {
