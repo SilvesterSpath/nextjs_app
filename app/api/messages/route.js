@@ -25,7 +25,6 @@ export const GET = async (req, res) => {
     const messages = await Message.find({ sender: user.id }).sort({
       createdAt: -1,
     });
-    console.log(messages);
 
     return new Response(JSON.stringify(messages), {
       status: 200,
