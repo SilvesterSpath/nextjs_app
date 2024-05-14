@@ -47,13 +47,13 @@ const MessagesPage = () => {
                   <div class='relative bg-white p-4 rounded-md shadow-md border border-gray-200'>
                     <h2 class='text-xl mb-4'>
                       <span class='font-bold'>Property Inquiry:</span>$
-                      {item.property}
+                      {item.property.title}
                     </h2>
                     <p class='text-gray-700'>{item.body}</p>
 
                     <ul class='mt-4'>
                       <li>
-                        <strong>Name:</strong> {item.name}
+                        <strong>Name:</strong> {item.sender.name}
                       </li>
 
                       <li>
