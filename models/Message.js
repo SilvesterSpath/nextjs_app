@@ -14,7 +14,6 @@ const MessageSchema = new Schema(
       ref: 'User',
       required: true,
     },
-
     property: {
       type: Schema.Types.ObjectId,
       ref: 'Property',
@@ -28,7 +27,7 @@ const MessageSchema = new Schema(
       type: String,
       required: [true, 'Please provide an email'],
     },
-    photo: {
+    phone: {
       type: String,
     },
     body: {
