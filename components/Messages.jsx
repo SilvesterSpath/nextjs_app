@@ -1,6 +1,6 @@
 'use client';
 import Spinner from '@/components/Spinner';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Messages = () => {
   const [isLoading, setIsLoading] = useState(true);
