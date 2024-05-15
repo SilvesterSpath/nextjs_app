@@ -26,11 +26,9 @@ export const GET = async (req, res) => {
         createdAt: -1,
       })
       .lean()
-      .populate('sender', 'name')
-      .populate('property', 'title')
+      .populate('sender', 'username')
+      .populate('property', 'name')
       .exec();
-
-    console.log(messages);
 
     return new Response(JSON.stringify(messages), {
       status: 200,

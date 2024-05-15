@@ -1,7 +1,7 @@
 'use client';
 import Spinner from '@/components/Spinner';
 import { useEffect, useState } from 'react';
-import Message from './Message';
+import Message from '@/components/Message';
 
 const Messages = () => {
   const [isLoading, setIsLoading] = useState(true);
