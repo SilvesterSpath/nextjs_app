@@ -52,6 +52,7 @@ export const POST = async (req, res) => {
     const { name, email, phone, message, property, recipient } =
       await req.json();
 
+    console.log('backendData', property);
     const sessionUser = await getSessionUser();
 
     if (!sessionUser || !sessionUser.user) {
@@ -85,6 +86,8 @@ export const POST = async (req, res) => {
       phone,
       body: message,
     });
+
+    console.log('newMessageData', newMessage);
 
     await newMessage.save();
 
