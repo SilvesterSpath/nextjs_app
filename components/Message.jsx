@@ -1,6 +1,27 @@
+'use client';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Message = ({ message }) => {
+  const [isRead, setIsRead] = useState(message.read);
+
+  const handleRead = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`/api/messages/${message._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (res.status === 200) {
+        setIsRead(!isRead);
+      }
+    } catch (error) {}
+  };
+
   return (
     <>
       {' '}
@@ -37,8 +58,11 @@ const Message = ({ message }) => {
             )}
           </li>
         </ul>
-        <button className='mt-4 mr-3 bg-blue-500 text-white py-1 px-3 rounded-md'>
-          Mark As Read
+        <button
+          onClick={handleRead}
+          className='mt-4 mr-3 bg-blue-500 text-white py-1 px-3 rounded-md'
+        >
+          {isRead ? 'Mark as Unread' : 'Mark as Read'}
         </button>
         <button className='mt-4 bg-red-500 text-white py-1 px-3 rounded-md'>
           Delete
