@@ -40,7 +40,9 @@ const Messages = () => {
               {messages.length === 0 ? (
                 <p>You have no messages to show</p>
               ) : (
-                messages.map((item) => <Message message={item} />)
+                messages.map((item) => (
+                  <Message message={item} key={item._id} />
+                ))
               )}
             </div>
           </div>
