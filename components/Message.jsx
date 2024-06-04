@@ -18,9 +18,15 @@ const Message = ({ message }) => {
 
       if (res.status === 200) {
         setIsRead(!isRead);
+        if (!isRead) {
+          toast.success('Message marked as read');
+        } else {
+          toast.success('Marked as new');
+        }
       }
     } catch (error) {
       console.log(error);
+      toast.error('Error marking message as read');
     }
   };
 
