@@ -1,6 +1,6 @@
 'use client';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Message = ({ message }) => {

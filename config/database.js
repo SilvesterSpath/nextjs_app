@@ -1,26 +1,33 @@
 import mongoose from 'mongoose';
 
-let connected = false;
+let cached = global.mongoose;
 
-// async because mongoose is async and returns a promise
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
-  // only the fields in the schema will be saved
   mongoose.set('strictQuery', true);
 
-  // If the database is already connected, don't connect again (because we use next.js's api)
-  if (connected) {
+  // 1 = connected in Mongoose readyState
+  if (cached.conn && mongoose.connection.readyState === 1) {
     console.log('MongoDB is already connected...');
-    return;
+    return cached.conn;
   }
-};
 
-// Connect to MongoDB
-try {
-  await mongoose.connect(process.env.MONGO_URI);
-  connected = true;
-  console.log('MonogDB connected...');
-} catch (error) {
-  console.log(error);
-}
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(process.env.MONGO_URI);
+  }
+
+  try {
+    cached.conn = await cached.promise;
+    console.log('MongoDB connected...');
+  } catch (error) {
+    cached.promise = null;
+    throw error;
+  }
+
+  return cached.conn;
+};
 
 export default connectDB;

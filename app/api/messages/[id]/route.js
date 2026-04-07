@@ -7,16 +7,13 @@ export const dynamic = 'force-dynamic';
 
 // PUT /api/messages/:id
 export const PUT = async (req, { params }, res) => {
-  console.log('inside PUT');
   try {
     await connectDB();
 
     const { id } = params; // the id is the [id] in the folder name
-    console.log('id', id);
 
     const sessionUser = await getSessionUser(req, res);
     const { userId } = sessionUser;
-    console.log('userId', userId);
 
     if (!sessionUser || !sessionUser.user) {
       return new Response(
@@ -26,7 +23,6 @@ export const PUT = async (req, { params }, res) => {
     }
 
     const message = await Message.findById(id);
-    console.log('message', message);
 
     if (!message) return new Response('Message not found', { status: 404 });
 
