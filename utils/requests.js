@@ -68,6 +68,23 @@ export async function fetchUserProperties(userId) {
   }
 }
 
+// Generate AI content for a property listing
+export async function generateAIPropertyContent(payload) {
+  const response = await fetch('/api/properties/ai-content', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.error?.message || 'Failed to generate AI content');
+  }
+
+  return data;
+}
+
 // Fetch search results
 export async function fetchSearchResults(location, propertyType) {
   try {

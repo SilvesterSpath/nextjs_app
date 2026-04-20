@@ -1,8 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { generateAIPropertyContent } from '@/utils/requests';
 
 const PropertyAddForm = () => {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [aiError, setAiError] = useState('');
+  const [rawNotes, setRawNotes] = useState('');
+
   const [fields, setFields] = useState({
     type: 'Apartment',
     name: 'Test Property',
@@ -76,6 +81,36 @@ const PropertyAddForm = () => {
     setFields((fields) => ({ ...fields, images: updatedImages }));
   };
 
+  const handleGenerateAIContent = async () => {
+    setAiError('');
+    setIsGenerating(true);
+
+    try {
+      const location = [fields.location.city, fields.location.state]
+        .filter(Boolean)
+        .join(', ');
+
+      const result = await generateAIPropertyContent({
+        propertyType: fields.type,
+        location,
+        beds: fields.beds,
+        baths: fields.baths,
+        amenities: fields.amenities,
+        rawNotes,
+      });
+
+      setFields((prev) => ({
+        ...prev,
+        name: result.data.title,
+        description: result.data.shortDescription,
+      }));
+    } catch (error) {
+      setAiError(error.message || 'Failed to generate AI content');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   return (
     <div>
       {' '}
@@ -140,6 +175,31 @@ const PropertyAddForm = () => {
             value={fields.description}
             onChange={handleChange}
           ></textarea>
+          <div className='mt-3 pt-3 border-t border-gray-200'>
+            <label
+              htmlFor='rawNotes'
+              className='block text-gray-500 text-xs mb-1'
+            >
+              Hints for AI <span className='font-normal'>(optional)</span>
+            </label>
+            <textarea
+              id='rawNotes'
+              className='border rounded w-full py-2 px-3 mb-2 text-sm text-gray-600'
+              rows='2'
+              placeholder={`Start here if you want to generate with AI.\ne.g. Great natural light, quiet street, close to downtown`}
+              value={rawNotes}
+              onChange={(e) => setRawNotes(e.target.value)}
+            />
+            {aiError && <p className='text-red-500 text-xs mb-2'>{aiError}</p>}
+            <button
+              type='button'
+              onClick={handleGenerateAIContent}
+              disabled={isGenerating}
+              className='text-indigo-600 hover:text-indigo-800 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium focus:outline-none'
+            >
+              {isGenerating ? 'Generating...' : 'Generate description'}
+            </button>
+          </div>
         </div>
 
         <div className='mb-4 bg-blue-50 p-4'>
