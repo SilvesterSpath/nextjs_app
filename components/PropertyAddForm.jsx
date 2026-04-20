@@ -83,13 +83,19 @@ const PropertyAddForm = () => {
 
   const handleGenerateAIContent = async () => {
     setAiError('');
+
+    const location = [fields.location.city, fields.location.state]
+      .filter(Boolean)
+      .join(', ');
+
+    if (!location) {
+      setAiError('Add a city or state so the AI has a location to work with.');
+      return;
+    }
+
     setIsGenerating(true);
 
     try {
-      const location = [fields.location.city, fields.location.state]
-        .filter(Boolean)
-        .join(', ');
-
       const result = await generateAIPropertyContent({
         propertyType: fields.type,
         location,
@@ -188,13 +194,17 @@ const PropertyAddForm = () => {
               rows='2'
               placeholder={`Start here if you want to generate with AI.\ne.g. Great natural light, quiet street, close to downtown`}
               value={rawNotes}
-              onChange={(e) => setRawNotes(e.target.value)}
+              onChange={(e) => {
+                setRawNotes(e.target.value);
+                if (aiError) setAiError('');
+              }}
             />
             {aiError && <p className='text-red-500 text-xs mb-2'>{aiError}</p>}
             <button
               type='button'
               onClick={handleGenerateAIContent}
               disabled={isGenerating}
+              aria-busy={isGenerating}
               className='text-indigo-600 hover:text-indigo-800 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-medium focus:outline-none'
             >
               {isGenerating ? 'Generating...' : 'Generate description'}

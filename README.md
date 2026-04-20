@@ -118,6 +118,8 @@ npm run test:coverage
 | `CLOUDINARY_*` | `config/cloudinary.js` | Image uploads |
 | `NEXT_PUBLIC_API_DOMAIN` | `utils/requests.js` | Full origin + `/api` for server-side `fetch` from RSC (e.g. `http://localhost:3000/api`) |
 | `NEXT_PUBLIC_DOMAIN` | `components/ShareButton.jsx` | Absolute share URLs |
+| `OPENAI_API_KEY` | `utils/ai/generatePropertyAIContent.js` | Required for AI description generation. If unset the endpoint returns `500 AI_PROVIDER_NOT_CONFIGURED`. |
+| `OPENAI_MODEL` | `utils/ai/generatePropertyAIContent.js` | Optional. OpenAI model name. Defaults to `gpt-4o-mini`. |
 
 **Repository gap:** NextAuth’s conventional `NEXTAUTH_URL` is **not** referenced in code; some hosts/docs expect it. This project relies on `NEXT_AUTH_URL_INTERNAL` / `NEXT_AUTH_URL` instead — align these with your real public origin in production.
 
@@ -346,6 +348,72 @@ npm run test:coverage
 | Session missing `user.id` | User missing in DB for email; `session` callback error |
 | 500 on messages inbox when logged out | `GET /api/messages` null-destructure bug |
 | Edit page reachable without middleware | `middleware.js` matcher omits `/properties/[id]/edit` |
+
+---
+
+## AI content generation
+
+The Add Property form includes an optional "Generate description" helper that calls OpenAI to produce a listing title and short description from the property details already entered in the form.
+
+### Required environment variable
+
+| Variable | Purpose |
+|----------|---------|
+| `OPENAI_API_KEY` | Server-side API key for OpenAI. **Required.** |
+| `OPENAI_MODEL` | Model override. Optional — defaults to `gpt-4o-mini`. |
+
+### Endpoint
+
+```
+POST /api/properties/ai-content
+```
+
+- Requires an authenticated session (NextAuth). Returns `401` if unauthenticated.
+- Server-side only — the API key is never exposed to the client.
+
+### Request body (JSON)
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| `propertyType` | string | yes | e.g. `"Apartment"` |
+| `location` | string | yes | e.g. `"Austin, TX"` |
+| `beds` | number | yes | Must be ≥ 0 |
+| `baths` | number | yes | Must be ≥ 0 |
+| `amenities` | string[] | yes | Can be empty array; max 30 items |
+| `rawNotes` | string | no | Optional user hints; max 1200 characters |
+
+### Success response `200`
+
+```json
+{
+  "success": true,
+  "data": {
+    "title": "...",
+    "shortDescription": "..."
+  }
+}
+```
+
+### Error response shape
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "UNAUTHORIZED | INVALID_REQUEST | AI_PROVIDER_NOT_CONFIGURED | AI_PROVIDER_ERROR | AI_INVALID_RESPONSE | INTERNAL_ERROR",
+    "message": "..."
+  }
+}
+```
+
+| Code | Status | Meaning |
+|------|--------|---------|
+| `UNAUTHORIZED` | 401 | No valid session |
+| `INVALID_REQUEST` | 400 | Malformed JSON body or failed field validation |
+| `AI_PROVIDER_NOT_CONFIGURED` | 500 | `OPENAI_API_KEY` is not set |
+| `AI_PROVIDER_ERROR` | 502 | OpenAI request failed (network error or non-OK HTTP response) |
+| `AI_INVALID_RESPONSE` | 502 | OpenAI returned a response that could not be parsed into the expected shape |
+| `INTERNAL_ERROR` | 500 | Unexpected server error |
 
 ---
 
