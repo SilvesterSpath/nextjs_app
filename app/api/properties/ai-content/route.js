@@ -20,7 +20,7 @@ const errorResponse = (status, message, code) =>
         message,
       },
     },
-    status
+    status,
   );
 
 // POST /api/properties/ai-content
@@ -33,7 +33,17 @@ export const POST = async (request) => {
       return errorResponse(401, 'Unauthorized', 'UNAUTHORIZED');
     }
 
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return errorResponse(
+        400,
+        'Request body must be valid JSON',
+        'INVALID_REQUEST',
+      );
+    }
+
     const validated = validatePropertyAIContentPayload(body);
 
     if (validated.error) {
@@ -46,7 +56,7 @@ export const POST = async (request) => {
       return errorResponse(
         aiResult.error.status,
         aiResult.error.message,
-        aiResult.error.code
+        aiResult.error.code,
       );
     }
 
@@ -56,6 +66,10 @@ export const POST = async (request) => {
     });
   } catch (error) {
     console.log(error);
-    return errorResponse(500, 'Failed to generate AI content', 'INTERNAL_ERROR');
+    return errorResponse(
+      500,
+      'Failed to generate AI content',
+      'INTERNAL_ERROR',
+    );
   }
 };
