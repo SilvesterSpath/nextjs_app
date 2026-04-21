@@ -1,6 +1,8 @@
 import connectDB from '@/config/database';
 import Property from '@/models/Property';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/properties/search
 // when I hit this route in the browser:
 //'http://localhost:3000/api/properties/search?location=boston&propertyType=All'
