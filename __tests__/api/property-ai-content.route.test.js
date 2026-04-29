@@ -1,6 +1,7 @@
 import { POST } from '@/app/api/properties/ai-content/route';
 import connectDB from '@/config/database';
 import { getSessionUser } from '@/utils/getSessionUser';
+import { resetRateLimiter } from '@/utils/ai/rateLimiter';
 
 jest.mock('@/config/database', () => jest.fn());
 jest.mock('@/utils/getSessionUser', () => ({
@@ -10,6 +11,7 @@ jest.mock('@/utils/getSessionUser', () => ({
 describe('POST /api/properties/ai-content', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    resetRateLimiter();
     process.env.OPENAI_API_KEY = 'test-key';
     global.fetch = jest.fn();
   });

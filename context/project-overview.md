@@ -1,4 +1,4 @@
-# PropertyPulse - Project Overview
+# HomeHaven - Project Overview
 
 Repository-specific overview for the current codebase.
 Facts are based on `README.md` and existing project files. Unknowns are marked as assumptions.
@@ -7,7 +7,7 @@ Facts are based on `README.md` and existing project files. Unknowns are marked a
 
 ## What This App Does
 
-PropertyPulse is a rental marketplace web app.
+HomeHaven is a rental marketplace web app.
 
 - Public users can browse all listings, search by location and type, and view listing details.
 - Signed-in users can add, edit, and delete their own listings.

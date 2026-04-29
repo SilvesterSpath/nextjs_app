@@ -23,3 +23,7 @@ export const isRateLimited = (userId) => {
   requestLog.set(userId, recent);
   return false;
 };
+
+export const resetRateLimiter = () => {
+  requestLog.clear();
+};

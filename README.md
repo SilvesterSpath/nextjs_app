@@ -1,4 +1,4 @@
-# PropertyPulse — Technical README
+# HomeHaven — Technical README
 
 Production-oriented documentation for this repository only. Uncertain items are labeled **Assumption**; gaps are stated explicitly.
 
@@ -108,18 +108,18 @@ npm run test:coverage
 
 ## Environment variables
 
-| Variable | Used where | Purpose |
-|----------|------------|---------|
-| `MONGO_URI` | `config/database.js` | Mongoose connection string |
-| `NEXTAUTH_SECRET` | `utils/authOptions.js` | NextAuth signing/encryption |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | `utils/authOptions.js` | Google provider |
-| `NEXT_AUTH_URL_INTERNAL` | `utils/authOptions.js` | Base URL concatenated for Google `callbackUrl` |
-| `NEXT_AUTH_URL` | `app/api/properties/route.js` | `Response.redirect` after `POST` create property |
-| `CLOUDINARY_*` | `config/cloudinary.js` | Image uploads |
-| `NEXT_PUBLIC_API_DOMAIN` | `utils/requests.js` | Full origin + `/api` for server-side `fetch` from RSC (e.g. `http://localhost:3000/api`) |
-| `NEXT_PUBLIC_DOMAIN` | `components/ShareButton.jsx` | Absolute share URLs |
-| `OPENAI_API_KEY` | `utils/ai/generatePropertyAIContent.js` | Required for AI description generation. If unset the endpoint returns `500 AI_PROVIDER_NOT_CONFIGURED`. |
-| `OPENAI_MODEL` | `utils/ai/generatePropertyAIContent.js` | Optional. OpenAI model name. Defaults to `gpt-4o-mini`. |
+| Variable                                   | Used where                              | Purpose                                                                                                 |
+| ------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `MONGO_URI`                                | `config/database.js`                    | Mongoose connection string                                                                              |
+| `NEXTAUTH_SECRET`                          | `utils/authOptions.js`                  | NextAuth signing/encryption                                                                             |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | `utils/authOptions.js`                  | Google provider                                                                                         |
+| `NEXT_AUTH_URL_INTERNAL`                   | `utils/authOptions.js`                  | Base URL concatenated for Google `callbackUrl`                                                          |
+| `NEXT_AUTH_URL`                            | `app/api/properties/route.js`           | `Response.redirect` after `POST` create property                                                        |
+| `CLOUDINARY_*`                             | `config/cloudinary.js`                  | Image uploads                                                                                           |
+| `NEXT_PUBLIC_API_DOMAIN`                   | `utils/requests.js`                     | Full origin + `/api` for server-side `fetch` from RSC (e.g. `http://localhost:3000/api`)                |
+| `NEXT_PUBLIC_DOMAIN`                       | `components/ShareButton.jsx`            | Absolute share URLs                                                                                     |
+| `OPENAI_API_KEY`                           | `utils/ai/generatePropertyAIContent.js` | Required for AI description generation. If unset the endpoint returns `500 AI_PROVIDER_NOT_CONFIGURED`. |
+| `OPENAI_MODEL`                             | `utils/ai/generatePropertyAIContent.js` | Optional. OpenAI model name. Defaults to `gpt-4o-mini`.                                                 |
 
 **Repository gap:** NextAuth’s conventional `NEXTAUTH_URL` is **not** referenced in code; some hosts/docs expect it. This project relies on `NEXT_AUTH_URL_INTERNAL` / `NEXT_AUTH_URL` instead — align these with your real public origin in production.
 
@@ -180,15 +180,15 @@ npm run test:coverage
 
 ### API-level authorization (partial inventory)
 
-| Area | Check |
-|------|--------|
-| `POST /api/properties` | Requires session |
-| `PUT` / `DELETE /api/properties/[id]` | Requires session + owner match |
-| `GET/POST /api/bookmarks` | Requires session |
-| `POST /api/bookmarks/check` | Requires session |
-| `GET/POST /api/messages` | Requires session (but see bug below) |
-| `DELETE /api/messages/[id]` | Requires session + recipient match |
-| `GET /api/properties/user/[userId]` | **No session check in code** |
+| Area                                  | Check                                |
+| ------------------------------------- | ------------------------------------ |
+| `POST /api/properties`                | Requires session                     |
+| `PUT` / `DELETE /api/properties/[id]` | Requires session + owner match       |
+| `GET/POST /api/bookmarks`             | Requires session                     |
+| `POST /api/bookmarks/check`           | Requires session                     |
+| `GET/POST /api/messages`              | Requires session (but see bug below) |
+| `DELETE /api/messages/[id]`           | Requires session + recipient match   |
+| `GET /api/properties/user/[userId]`   | **No session check in code**         |
 
 ---
 
@@ -198,40 +198,40 @@ npm run test:coverage
 
 ### `User` (`models/User.js`)
 
-| Field | Type | Notes |
-|-------|------|--------|
-| `email` | String | required, unique |
-| `username` | String | required, unique |
-| `image` | String | default Cloudinary default avatar URL |
-| `bookmarks` | [ObjectId → Property] | |
-| `createdAt`, `updatedAt` | Date | `timestamps: true` |
+| Field                    | Type                  | Notes                                 |
+| ------------------------ | --------------------- | ------------------------------------- |
+| `email`                  | String                | required, unique                      |
+| `username`               | String                | required, unique                      |
+| `image`                  | String                | default Cloudinary default avatar URL |
+| `bookmarks`              | [ObjectId → Property] |                                       |
+| `createdAt`, `updatedAt` | Date                  | `timestamps: true`                    |
 
 ### `Property` (`models/Property.js`)
 
-| Field | Type | Notes |
-|-------|------|--------|
-| `owner` | ObjectId → User | required |
-| `name`, `type` | String | required |
-| `description` | String | optional |
-| `location` | { street, city, state, zipcode } | subdocs, not all required at schema level |
-| `beds`, `baths`, `square_feet` | Number | required |
-| `amenities` | [String] | |
-| `rates` | { nightly, monthly, weekly } | optional numbers |
-| `seller_info` | { name, phone, email } | optional |
-| `images` | [String] | URLs |
-| `is_featured` | Boolean | default false |
-| `createdAt`, `updatedAt` | Date | |
+| Field                          | Type                             | Notes                                     |
+| ------------------------------ | -------------------------------- | ----------------------------------------- |
+| `owner`                        | ObjectId → User                  | required                                  |
+| `name`, `type`                 | String                           | required                                  |
+| `description`                  | String                           | optional                                  |
+| `location`                     | { street, city, state, zipcode } | subdocs, not all required at schema level |
+| `beds`, `baths`, `square_feet` | Number                           | required                                  |
+| `amenities`                    | [String]                         |                                           |
+| `rates`                        | { nightly, monthly, weekly }     | optional numbers                          |
+| `seller_info`                  | { name, phone, email }           | optional                                  |
+| `images`                       | [String]                         | URLs                                      |
+| `is_featured`                  | Boolean                          | default false                             |
+| `createdAt`, `updatedAt`       | Date                             |                                           |
 
 ### `Message` (`models/Message.js`)
 
-| Field | Type | Notes |
-|-------|------|--------|
-| `sender`, `recipient` | ObjectId → User | required |
-| `property` | ObjectId → Property | required |
-| `name`, `email` | String | required |
-| `phone`, `body` | String | phone/body optional in practice unless Mongoose validation fails on empty |
-| `read` | Boolean | default false |
-| `createdAt`, `updatedAt` | Date | |
+| Field                    | Type                | Notes                                                                     |
+| ------------------------ | ------------------- | ------------------------------------------------------------------------- |
+| `sender`, `recipient`    | ObjectId → User     | required                                                                  |
+| `property`               | ObjectId → Property | required                                                                  |
+| `name`, `email`          | String              | required                                                                  |
+| `phone`, `body`          | String              | phone/body optional in practice unless Mongoose validation fails on empty |
+| `read`                   | Boolean             | default false                                                             |
+| `createdAt`, `updatedAt` | Date                |                                                                           |
 
 **Indexes:** Only uniqueness on `User.email` and `User.username` is declared in schema. **No explicit compound indexes** for search queries (e.g. `location.city`, `type`) — performance at scale is **unknown** without profiling.
 
@@ -338,16 +338,16 @@ npm run test:coverage
 
 ## Troubleshooting
 
-| Symptom | Likely cause in this repo |
-|---------|---------------------------|
-| Empty listings on home/all properties | `NEXT_PUBLIC_API_DOMAIN` unset or wrong (must include `/api`) |
-| Google redirect mismatch | `NEXT_AUTH_URL_INTERNAL` / Console redirect URI mismatch |
-| Redirect after add property wrong host | `NEXT_AUTH_URL` wrong or http vs https |
-| Images fail | Cloudinary env missing or invalid |
-| Mongo errors on cold start | `MONGO_URI` wrong; Atlas network allowlist |
-| Session missing `user.id` | User missing in DB for email; `session` callback error |
-| 500 on messages inbox when logged out | `GET /api/messages` null-destructure bug |
-| Edit page reachable without middleware | `middleware.js` matcher omits `/properties/[id]/edit` |
+| Symptom                                | Likely cause in this repo                                     |
+| -------------------------------------- | ------------------------------------------------------------- |
+| Empty listings on home/all properties  | `NEXT_PUBLIC_API_DOMAIN` unset or wrong (must include `/api`) |
+| Google redirect mismatch               | `NEXT_AUTH_URL_INTERNAL` / Console redirect URI mismatch      |
+| Redirect after add property wrong host | `NEXT_AUTH_URL` wrong or http vs https                        |
+| Images fail                            | Cloudinary env missing or invalid                             |
+| Mongo errors on cold start             | `MONGO_URI` wrong; Atlas network allowlist                    |
+| Session missing `user.id`              | User missing in DB for email; `session` callback error        |
+| 500 on messages inbox when logged out  | `GET /api/messages` null-destructure bug                      |
+| Edit page reachable without middleware | `middleware.js` matcher omits `/properties/[id]/edit`         |
 
 ---
 
@@ -357,10 +357,10 @@ The Add Property form includes an optional "Generate description" helper that ca
 
 ### Required environment variable
 
-| Variable | Purpose |
-|----------|---------|
-| `OPENAI_API_KEY` | Server-side API key for OpenAI. **Required.** |
-| `OPENAI_MODEL` | Model override. Optional — defaults to `gpt-4o-mini`. |
+| Variable         | Purpose                                               |
+| ---------------- | ----------------------------------------------------- |
+| `OPENAI_API_KEY` | Server-side API key for OpenAI. **Required.**         |
+| `OPENAI_MODEL`   | Model override. Optional — defaults to `gpt-4o-mini`. |
 
 ### Endpoint
 
@@ -373,14 +373,14 @@ POST /api/properties/ai-content
 
 ### Request body (JSON)
 
-| Field | Type | Required | Notes |
-|-------|------|----------|-------|
-| `propertyType` | string | yes | e.g. `"Apartment"` |
-| `location` | string | yes | e.g. `"Austin, TX"` |
-| `beds` | number | yes | Must be ≥ 0 |
-| `baths` | number | yes | Must be ≥ 0 |
-| `amenities` | string[] | yes | Can be empty array; max 30 items |
-| `rawNotes` | string | no | Optional user hints; max 1200 characters |
+| Field          | Type     | Required | Notes                                    |
+| -------------- | -------- | -------- | ---------------------------------------- |
+| `propertyType` | string   | yes      | e.g. `"Apartment"`                       |
+| `location`     | string   | yes      | e.g. `"Austin, TX"`                      |
+| `beds`         | number   | yes      | Must be ≥ 0                              |
+| `baths`        | number   | yes      | Must be ≥ 0                              |
+| `amenities`    | string[] | yes      | Can be empty array; max 30 items         |
+| `rawNotes`     | string   | no       | Optional user hints; max 1200 characters |
 
 ### Success response `200`
 
@@ -406,14 +406,14 @@ POST /api/properties/ai-content
 }
 ```
 
-| Code | Status | Meaning |
-|------|--------|---------|
-| `UNAUTHORIZED` | 401 | No valid session |
-| `INVALID_REQUEST` | 400 | Malformed JSON body or failed field validation |
-| `AI_PROVIDER_NOT_CONFIGURED` | 500 | `OPENAI_API_KEY` is not set |
-| `AI_PROVIDER_ERROR` | 502 | OpenAI request failed (network error or non-OK HTTP response) |
-| `AI_INVALID_RESPONSE` | 502 | OpenAI returned a response that could not be parsed into the expected shape |
-| `INTERNAL_ERROR` | 500 | Unexpected server error |
+| Code                         | Status | Meaning                                                                     |
+| ---------------------------- | ------ | --------------------------------------------------------------------------- |
+| `UNAUTHORIZED`               | 401    | No valid session                                                            |
+| `INVALID_REQUEST`            | 400    | Malformed JSON body or failed field validation                              |
+| `AI_PROVIDER_NOT_CONFIGURED` | 500    | `OPENAI_API_KEY` is not set                                                 |
+| `AI_PROVIDER_ERROR`          | 502    | OpenAI request failed (network error or non-OK HTTP response)               |
+| `AI_INVALID_RESPONSE`        | 502    | OpenAI returned a response that could not be parsed into the expected shape |
+| `INTERNAL_ERROR`             | 500    | Unexpected server error                                                     |
 
 ---
 
