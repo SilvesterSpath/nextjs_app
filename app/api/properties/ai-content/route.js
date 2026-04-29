@@ -2,6 +2,7 @@ import connectDB from '@/config/database';
 import { getSessionUser } from '@/utils/getSessionUser';
 import { generatePropertyAIContent } from '@/utils/ai/generatePropertyAIContent';
 import { validatePropertyAIContentPayload } from '@/utils/ai/validatePropertyAIContentPayload';
+import { isRateLimited } from '@/utils/ai/rateLimiter';
 
 const jsonResponse = (payload, status = 200) =>
   new Response(JSON.stringify(payload), {
@@ -31,6 +32,14 @@ export const POST = async (request) => {
     const sessionUser = await getSessionUser();
     if (!sessionUser || !sessionUser.userId) {
       return errorResponse(401, 'Unauthorized', 'UNAUTHORIZED');
+    }
+
+    if (isRateLimited(sessionUser.userId)) {
+      return errorResponse(
+        429,
+        'Too many requests. Try again shortly.',
+        'RATE_LIMITED',
+      );
     }
 
     let body;
